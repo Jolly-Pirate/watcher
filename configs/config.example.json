@@ -1,0 +1,28 @@
+{
+  "RPC_NODES": [
+    "https://api.steemit.com",
+    "https://api.steemitstage.com",
+    "https://steemd.privex.io",
+    "https://gtg.steem.house:8090",
+    "https://rpc.buildteam.io",
+    "https://steemd.minnowsupportproject.org"
+  ],
+  "WITNESS": "",
+  "TEST_MODE": false,
+  "SIGNING_KEYS": [
+  ],
+  "INTERVAL": 10,
+  "MISSED_BLOCKS_THRESHOLD": 1,
+  "ROTATE_KEYS": true,
+  "ROTATE_ROUNDS": 1,
+  "PROPS": {
+    "account_creation_fee": "0.100 STEEM",
+    "maximum_block_size": 65536,
+    "sbd_interest_rate": 0
+  },
+  "ALERT_METHODS": [
+    "EMAIL", "TELEGRAM"
+  ],
+  "SMS_PROVIDER": "nexmo",
+  "ALERT_AFTER_EVERY_MISSED": true
+}
