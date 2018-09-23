@@ -19,7 +19,7 @@
     "dsteem": "^0.10.0",
     "readline-sync": "^1.4.9",
     "steem": "^0.7.1",
-    "witness-essentials-package": "^1.0.0"
+    "witness-essentials-package": "^1.0.1"
   },
   "bugs": {
     "url": "https://github.com/witness-essentials/watcher/issues"
