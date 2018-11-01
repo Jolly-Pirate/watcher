@@ -58,22 +58,22 @@ let config = convict({
     default: 1
   },
   ALERT_AFTER_EVERY_MISSED: {
-    doc: 'Settings for Alert Methods',
+    doc: 'Alert after every missed block.',
     format: '*',
     default: ''
   },
   SMS: {
-    doc: 'Settings for Alert Methods',
+    doc: 'Settings for SMS alert',
     format: '*',
     default: {}
   },
   TELEGRAM: {
-    doc: 'Settings for Alert Methods',
+    doc: 'Settings for TELEGRAM alert',
     format: '*',
     default: {}
   },
   EMAIL: {
-    doc: 'Settings for Alert Methods',
+    doc: 'Settings for EMAIL alert',
     format: '*',
     default: {}
   }

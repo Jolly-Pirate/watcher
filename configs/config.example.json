@@ -18,29 +18,25 @@
   "INTERVAL": 10,
   "MISSED_BLOCKS_THRESHOLD": 1,
   "ROTATE_KEYS": true,
-  "ROTATE_ROUNDS": 1,
-  "ALERT_METHODS": {
-    "ALERT_AFTER_EVERY_MISSED": true,
-    "SMS": {
-      "NEXMO": false,
-      "TWILIO": false,
-      "SETTINGS": {
-        "API_KEY": "",
-        "API_SECRET": "",
-        "PHONE_NUMBER": "",
-        "FROM_NUMBER": "TWILIO ONLY"
-      }
-    },
-    "EMAIL": {
-      "ENABLED": true,
-      "GOOGLE_MAIL_ACCOUNT": "",
-      "GOOGLE_MAIL_PASSWORD": "",
-      "EMAIL_RECEIVER": ""
-    },
-    "TELEGRAM": {
-      "ENABLED": true,
-      "BOT_TOKEN": "",
-      "USER_ID": ""
-    }
+  "ROTATE_ROUNDS": 0,
+  "ALERT_AFTER_EVERY_MISSED": true,
+  "SMS": {
+    "NEXMO": false,
+    "TWILIO": false,
+    "API_KEY": "",
+    "API_SECRET": "",
+    "PHONE_NUMBER": "",
+    "FROM_NUMBER": "TWILIO ONLY"
+  },
+  "EMAIL": {
+    "ENABLED": false,
+    "GOOGLE_MAIL_ACCOUNT": "",
+    "GOOGLE_MAIL_PASSWORD": "",
+    "EMAIL_RECEIVER": ""
+  },
+  "TELEGRAM": {
+    "ENABLED": false,
+    "BOT_TOKEN": "",
+    "USER_ID": ""
   }
 }
