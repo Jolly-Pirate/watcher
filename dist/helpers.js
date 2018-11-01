@@ -9,38 +9,52 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const essentials = require("witness-essentials-package");
-const dsteem = require("dsteem");
-const _g = require('./_g');
+const dsteem = require("dsteem-hf20");
+const _g = require("./_g");
 const config = _g.config;
-exports.update_witness = (key, retries = 0) => __awaiter(this, void 0, void 0, function* () {
+exports.update_witness = (current_signing_key, transaction_signing_key, props, options = {}) => __awaiter(this, void 0, void 0, function* () {
     try {
-        yield essentials.update_witness(_g.client, key, _g.witness_data, process.env.ACTIVE_KEY);
+        if (!options.retries)
+            options.retries = 0;
+        if (options.set_properties) {
+            yield essentials.witness_set_properties(_g.client, _g.witness_data.witness, current_signing_key, props, transaction_signing_key);
+        }
+        else {
+            yield essentials.update_witness(_g.client, props.new_signing_key.toString(), _g.witness_data, transaction_signing_key);
+        }
     }
     catch (error) {
         console.error(error);
-        if (retries < 2) {
+        if (options.retries < 2) {
             yield essentials.timeout(1);
-            yield exports.update_witness(key, retries += 1);
+            options.retries += 1;
+            yield exports.update_witness(current_signing_key, transaction_signing_key, props, options);
         }
         else {
             exports.failover();
-            yield exports.update_witness(key, 0);
+            options.retries = 0;
+            yield exports.update_witness(current_signing_key, transaction_signing_key, props, options);
         }
     }
 });
-exports.get_witness = (retries = 0) => __awaiter(this, void 0, void 0, function* () {
+exports.get_witness = (options = { retries: 0 }) => __awaiter(this, void 0, void 0, function* () {
     try {
-        return yield essentials.get_witness_by_account(_g.client, _g.witness_data.witness);
+        if (!options.retries)
+            options.retries = 0;
+        let witness = yield essentials.get_witness_by_account(_g.client, _g.witness_data.witness);
+        return witness;
     }
     catch (error) {
         console.error(error);
-        if (retries < 2) {
+        if (options.retries < 2) {
             yield essentials.timeout(1);
-            yield exports.get_witness(retries += 1);
+            options.retries += 1;
+            yield exports.get_witness(options);
         }
         else {
             exports.failover();
-            yield exports.get_witness(0);
+            options.retries = 0;
+            yield exports.get_witness(options);
         }
     }
 });
@@ -50,19 +64,17 @@ exports.get_witness = (retries = 0) => __awaiter(this, void 0, void 0, function*
  */
 exports.send_alerts = (subject, message, force = false) => __awaiter(this, void 0, void 0, function* () {
     try {
-        for (let alert_method of config.ALERT_METHODS) {
-            if (alert_method === 'SMS') {
-                essentials.log(`Sending SMS: ${subject}`);
-                essentials.send_sms(`Witness Watcher: ${subject}`, message, config.SMS_PROVIDER, _g.provider_data);
-            }
-            else if (alert_method === 'EMAIL') {
-                essentials.log(`Sending Email: ${subject}`);
-                essentials.send_email(`Witness Watcher: ${subject}`, message, _g.mail_data);
-            }
-            else if (alert_method === 'TELEGRAM') {
-                essentials.log(`Sending Telegram: ${subject}`);
-                essentials.send_telegram(message, _g.telegram_data);
-            }
+        if (config.SMS.NEXMO || config.SMS.TWILIO) {
+            essentials.log(`Sending SMS: ${subject}`);
+            essentials.send_sms(`Witness Watcher: ${subject}`, message, config.SMS_PROVIDER, _g.provider_data);
+        }
+        if (config.EMAIL.ENABLED) {
+            essentials.log(`Sending Email: ${subject}`);
+            essentials.send_email(`Witness Watcher: ${subject}`, message, _g.mail_data);
+        }
+        if (config.TELEGRAM.ENABLED) {
+            essentials.log(`Sending Telegram: ${subject}`);
+            essentials.send_telegram(message, _g.telegram_data);
         }
     }
     catch (error) {
@@ -78,7 +90,7 @@ exports.failover = () => __awaiter(this, void 0, void 0, function* () {
  * Rotate through signing-keys, customized for witness-watcher. Remote uses a simpler version.
  */
 exports.update_signing_keys = () => {
-    _g.USED_SIGNING_KEYS.push(_g.CURRENT_BACKUP_KEY);
+    _g.USED_SIGNING_KEYS.push(_g.CURRENT_BACKUP_KEY.public);
     let index = _g.config.SIGNING_KEYS.indexOf(_g.CURRENT_BACKUP_KEY);
     if (index >= (_g.config.SIGNING_KEYS.length - 1)) {
         if (_g.config.ROTATE_KEYS && (_g.config.ROTATE_ROUNDS > _g.rotation_round || _g.config.ROTATE_ROUNDS === -1)) {
@@ -87,7 +99,7 @@ exports.update_signing_keys = () => {
             _g.rotation_round += 1;
         }
         else {
-            _g.CURRENT_BACKUP_KEY = _g.NULL_KEY;
+            _g.CURRENT_BACKUP_KEY = { public: _g.NULL_KEY, private: '' };
         }
     }
     else {
@@ -99,20 +111,55 @@ exports.set_initial_witness = (x) => {
     _g.current_total_missed = _g.start_total_missed;
     _g.witness_data.url = x.url;
     _g.witness_data.props = x.props;
+    _g.CURRENT_SIGNING_KEY = x.signing_key;
+    if (_g.config.SIGNING_KEYS.filter(y => y.public === x.signing_key).length <= 0) {
+        _g.config.SIGNING_KEYS.push({ public: x.signing_key, private: '' });
+    }
     _g.config.SIGNING_KEYS = essentials.order_keys(_g.config.SIGNING_KEYS, x.signing_key);
     _g.USED_SIGNING_KEYS = [x.signing_key];
     _g.CURRENT_BACKUP_KEY = essentials.get_next_key(_g.config.SIGNING_KEYS, x.signing_key, true);
 };
+exports.set_transaction_signing_key = () => {
+    _g.TRANSACTION_SIGNING_KEY = '';
+};
 exports.check_missing_env = () => __awaiter(this, void 0, void 0, function* () {
     try {
-        console.log('Checking .env & config');
-        let env_missing = [];
-        if (!process.env.ACTIVE_KEY)
-            env_missing.push('ACTIVE_KEY');
-        if (env_missing.length > 0) {
-            if (env_missing.length > 0)
-                essentials.log(`Missing .env variables: ${env_missing}`);
-            process.exit(-1);
+        console.log('Checking config');
+        const missing = [];
+        if (_g.config.SIGNING_KEYS.filter(x => x.private === '').length > 0 && !_g.config.ACTIVE_KEY) {
+            console.log(`Missing private signing-keys or private active-key. If you don't want to use the private active key, make sure to add all your signing-keys (including your active one) with the correct private signing-key.`);
+        }
+        if (_g.config.SMS.NEXMO || _g.config.SMS.TWILIO) {
+            let sms = _g.config.SMS;
+            if (!sms.API_KEY)
+                missing.push('SMS > API_KEY');
+            if (!sms.API_SECRET)
+                missing.push('SMS > API_SECRET');
+            if (!sms.PHONE_NUMBER)
+                missing.push('SMS > PHONE_NUMBER');
+            if (sms.TWILIO && !sms.FROM_NUMBER)
+                missing.push('SMS > FROM_NUMBER');
+        }
+        if (_g.config.EMAIL.ENABLED) {
+            let email = _g.config.EMAIL;
+            if (!email.GOOGLE_MAIL_ACCOUNT)
+                missing.push('EMAIL > GOOGLE_MAIL_ACCOUNT');
+            if (!email.GOOGLE_MAIL_PASSWORD)
+                missing.push('EMAIL > GOOGLE_MAIL_PASSWORD');
+            if (!email.EMAIL_RECEIVER)
+                missing.push('EMAIL > EMAIL_RECEIVER');
+        }
+        if (_g.config.TELEGRAM.ENABLED) {
+            let telegram = _g.config.TELEGRAM;
+            if (!telegram.BOT_TOKEN)
+                missing.push('TELEGRAM > BOT_TOKEN');
+            if (!telegram.USER_ID)
+                missing.push('TELEGRAM > USER_ID');
+        }
+        if (missing.length > 0) {
+            if (missing.length > 0)
+                essentials.log(`Missing config variables: ${missing}`);
+            process.exit();
         }
         console.log('Check was successful!');
         console.log('\n' + '----------------------------' + '\n');

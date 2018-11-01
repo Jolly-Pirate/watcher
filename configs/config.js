@@ -1,14 +1,20 @@
 const convict = require('convict')
 
 let config = convict({
+  TEST_MODE: {
+    doc: 'Broadcast transactions to the blockchain.',
+    format: Boolean,
+    default: false,
+    arg: 'test'
+  },
   RPC_NODES: {
     doc: 'Array of RPC-Nodes',
     format: '*',
     default: [
+      "https://api.steemit.com",
       "https://api.steemitstage.com",
       "https://steemd.privex.io",
       "https://gtg.steem.house:8090",
-      "https://rpc.buildteam.io",
       "https://steemd.minnowsupportproject.org"
     ],
     arg: "rpc"
@@ -19,17 +25,15 @@ let config = convict({
     default: 'witness-name',
     arg: 'witness'
   },
-  TEST_MODE: {
-    doc: 'Broadcast transactions to the blockchain.',
-    format: Boolean,
-    default: false,
-    arg: 'test'
+  ACTIVE_KEY: {
+    doc: 'Private active key',
+    format: String,
+    default: ''
   },
   SIGNING_KEYS: {
-    doc: 'Array of Signing-Keys (besides currently active)',
-    format: '*',
-    default: [],
-    arg: "keys"
+    doc: 'Signing key pairs based on public and private',
+    format: Array,
+    default: [{ public: '', private: '' }]
   },
   INTERVAL: {
     doc: 'Interval in Minutes',
@@ -53,29 +57,25 @@ let config = convict({
     format: Number,
     default: 1
   },
-  PROPS: {
-    doc: 'Properties for Witness',
-    format: '*',
-    default: [{
-      "account_creation_fee": "0.200 STEEM",
-      "maximum_block_size": 65536,
-      "sbd_interest_rate": 0
-    }]
-  },
-  ALERT_METHODS: {
-    doc: 'Which alert methods should be used',
-    format: '*',
-    default: ["EMAIL", "SMS", "TELEGRAM"]
-  },
-  SMS_PROVIDER: {
-    doc: 'SMS Provider',
-    format: ["nexmo", "twilio"],
-    default: 'nexmo'
-  },
   ALERT_AFTER_EVERY_MISSED: {
-    doc: 'Should there be an Alert after every missed?',
-    format: Boolean,
-    default: true
+    doc: 'Settings for Alert Methods',
+    format: '*',
+    default: ''
+  },
+  SMS: {
+    doc: 'Settings for Alert Methods',
+    format: '*',
+    default: {}
+  },
+  TELEGRAM: {
+    doc: 'Settings for Alert Methods',
+    format: '*',
+    default: {}
+  },
+  EMAIL: {
+    doc: 'Settings for Alert Methods',
+    format: '*',
+    default: {}
   }
 })
 
