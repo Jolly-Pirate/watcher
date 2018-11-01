@@ -55,15 +55,12 @@ nano configs/config.json
 - MISSED_BLOCKS_THRESHOLD: How many blocks can be missed until signing key gets changed / or disabled.
 - ROTATE_KEYS: The script can rotate between your signing keys, until ROTATE_ROUNDS has been reached (-1 is infinite)
 - WITNESS: Witness account
-- ACTIVE_KEY: Add your private active key. Only needed if you're not adding private signing keys, see below.
-- SIGNING_KEYS: Add **all** your signing keys here as pairs. As of HF20, you can now also publish your pricefeed with your private signing keys.
+- ACTIVE_KEY: Add your private active key. Only needed if you're not adding private signing keys (see below) or if your witness is disabled.
+- SIGNING_KEYS: Add **all** your signing keys here as pairs. As of HF20, you can now also change keys and witness properties via your private signing keys.
 
 ```
  [{ "public": "STM7..", "private": "5JS.." }, { "public": "STM5..", "private": "5PD.." }, { .. }]
 ```
-
-Info: The active key is now optional and only needed if your witness is disabled.
-
 
 - SMS
   - NEXMO: Use NEXMO as SMS alert service
