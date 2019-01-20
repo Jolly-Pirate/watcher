@@ -2,7 +2,7 @@ const convict = require('convict')
 
 let config = convict({
   TEST_MODE: {
-    doc: 'Broadcast transactions to the blockchain.',
+    doc: 'Run without broadcasting transactions to the blockchain.',
     format: Boolean,
     default: false,
     arg: 'test'

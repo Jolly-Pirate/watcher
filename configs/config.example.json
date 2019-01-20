@@ -17,7 +17,7 @@
   ],
   "INTERVAL": 10,
   "MISSED_BLOCKS_THRESHOLD": 1,
-  "ROTATE_KEYS": false,
+  "ROTATE_KEYS": true,
   "ROTATE_ROUNDS": 1,
   "ALERT_AFTER_EVERY_MISSED": true,
   "SMS": {

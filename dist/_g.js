@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const dsteem = require("dsteem-hf20");
+const dsteem = require("dsteem");
+const moment = require("moment");
 exports.NULL_KEY = 'STM1111111111111111111111111111111114T1Anm';
-exports.CURRENT_SIGNING_KEY = '';
 exports.ORIG_KEY = '';
 exports.TRANSACTION_SIGNING_KEY = '';
 exports.USED_SIGNING_KEYS = [];
@@ -10,6 +10,7 @@ exports.CURRENT_BACKUP_KEY = { public: 'STM1111111111111111111111111111111114T1A
 exports.rotation_round = 0;
 exports.start_total_missed = 99999;
 exports.current_total_missed = 99999;
+exports.last_missed = moment.utc().valueOf();
 exports.config = require('../configs/config.js').get();
 exports.current_node = exports.config.RPC_NODES[0];
 exports.client = new dsteem.Client(exports.current_node, { timeout: 8 * 1000 });
