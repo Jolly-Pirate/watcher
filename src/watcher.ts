@@ -95,6 +95,8 @@ const handle_missed_block = async (witness, IS_TESTING, NOTIFY, FAILOVER, DISABL
   if (moment.utc().subtract(_g.config.MAX_AGE_LAST_MISSED_DAYS, 'd').valueOf() >= _g.last_missed) {
     essentials.log(`Last missed block is older than ${_g.config.MAX_AGE_LAST_MISSED_DAYS} Days`)
     _g.start_total_missed = _g.current_total_missed = witness.total_missed - 1
+    // Resetting the rotation round
+    _g.rotation_round = 0
   }
 
   _g.last_missed = moment.utc().valueOf()
