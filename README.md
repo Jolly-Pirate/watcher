@@ -10,7 +10,7 @@ Script for Steem Witnesses to watch witness for missed blocks, failover towards 
 
 
 ## Docker Installation (Recommended)
-It is recommended to use Docker.
+It is recommended to use Docker. (Testing is currently not supported via docker)
 
 ```
 git clone https://github.com/witness-essentials/watcher.git
