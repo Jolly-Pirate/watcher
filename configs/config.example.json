@@ -20,6 +20,7 @@
   "ROTATE_KEYS": true,
   "ROTATE_ROUNDS": 1,
   "ALERT_AFTER_EVERY_MISSED": true,
+  "MAX_AGE_LAST_MISSED_DAYS":1,
   "SMS": {
     "NEXMO": false,
     "TWILIO": false,
