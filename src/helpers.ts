@@ -1,5 +1,7 @@
 import * as essentials from 'witness-essentials-package'
-import * as dsteem from 'dsteem-hf20'
+import * as dsteem from 'dsteem'
+import * as moment from 'moment'
+
 import _g = require('./_g')
 const config = _g.config
 
@@ -106,7 +108,6 @@ export let set_initial_witness = (x) => {
   _g.current_total_missed = _g.start_total_missed
   _g.witness_data.url = x.url
   _g.witness_data.props = x.props
-  _g.CURRENT_SIGNING_KEY = x.signing_key
 
   if (_g.config.SIGNING_KEYS.filter(y => y.public === x.signing_key).length <= 0) {
     _g.config.SIGNING_KEYS.push({ public: x.signing_key, private: '' })

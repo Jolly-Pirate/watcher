@@ -1,8 +1,8 @@
-import * as dsteem from 'dsteem-hf20'
+import * as dsteem from 'dsteem'
+import * as moment from 'moment'
 
 export const NULL_KEY = 'STM1111111111111111111111111111111114T1Anm'
 
-export let CURRENT_SIGNING_KEY: string = ''
 export let ORIG_KEY = ''
 export let TRANSACTION_SIGNING_KEY = ''
 export let USED_SIGNING_KEYS: Array<string> = []
@@ -12,6 +12,7 @@ export let rotation_round = 0
 
 export let start_total_missed = 99999
 export let current_total_missed = 99999
+export let last_missed = moment.utc().valueOf()
 
 export let config = require('../configs/config.js').get()
 

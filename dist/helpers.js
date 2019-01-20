@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const essentials = require("witness-essentials-package");
-const dsteem = require("dsteem-hf20");
+const dsteem = require("dsteem");
 const _g = require("./_g");
 const config = _g.config;
 exports.update_witness = (current_signing_key, transaction_signing_key, props, options = {}) => __awaiter(this, void 0, void 0, function* () {
@@ -111,7 +111,6 @@ exports.set_initial_witness = (x) => {
     _g.current_total_missed = _g.start_total_missed;
     _g.witness_data.url = x.url;
     _g.witness_data.props = x.props;
-    _g.CURRENT_SIGNING_KEY = x.signing_key;
     if (_g.config.SIGNING_KEYS.filter(y => y.public === x.signing_key).length <= 0) {
         _g.config.SIGNING_KEYS.push({ public: x.signing_key, private: '' });
     }
