@@ -113,5 +113,4 @@ npm run test
 
 ## Support
 
-
 Developed by <a href="https://therealwolf.me">@therealwolf</a>
