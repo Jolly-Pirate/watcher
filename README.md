@@ -103,6 +103,14 @@ pm2 save
 pm2 logs watcher
 ```
 
+## Testing
+
+You can also test, if everything has been setup correctly, by running the test script
+
+```
+npm run test
+```
+
 ## Support
 
 If you find this tool useful, consider voting for me (@therealwolf) as a witness (https://steemit.com/~witnesses) or <a href="https://v2.steemconnect.com/sign/account-witness-vote?witness=therealwolf&approve=1">directly with steemconnect</a>.
