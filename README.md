@@ -51,11 +51,14 @@ nano configs/config.json
 
 #### Config Explanation
 
-- TEST_MODE: It will alert you in case of missed blocks, but without actually changing signing keys
-- MISSED_BLOCKS_THRESHOLD: How many blocks can be missed until signing key gets changed / or disabled.
-- ROTATE_KEYS: The script can rotate between your signing keys, until ROTATE_ROUNDS has been reached (-1 is infinite)
-- WITNESS: Witness account
-- ACTIVE_KEY: Add your private active key. Only needed if you're not adding private signing keys (see below) or if your witness is disabled.
+- TEST_MODE: BOOLEAN - It will alert you in case of missed blocks, but without actually changing signing keys
+- MISSED_BLOCKS_THRESHOLD: NUMBER - How many blocks can be missed until signing key gets changed / or disabled.
+- ROTATE_KEYS: BOOLEAN - The script can rotate between your signing keys, until ROTATE_ROUNDS has been reached-
+- ROTATE_ROUNDS: NUMBER - How many rounds should be rotated? (-1 is infinite)
+- WITNESS: STRING - Witness account
+- INTERVAL: NUMBER - How often should watcher iterate and check for new missed blocks? (in minutes)
+- MAX_AGE_LAST_MISSED_DAYS: NUMBER - After how many days, should the data (as in rotated rounds & missed block threshold) be reset?
+- ACTIVE_KEY: STRING - Add your private active key. Only needed if you're not adding private signing keys (see below) or if your witness is disabled.
 - SIGNING_KEYS: Add **all** your signing keys here as pairs. As of HF20, you can now also change keys and witness properties via your private signing keys.
 
 ```
