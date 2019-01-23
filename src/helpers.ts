@@ -63,10 +63,10 @@ export let send_alerts = async (subject, message, force = false) => {
   try {
     if (config.SMS.NEXMO || config.SMS.TWILIO) {
       essentials.log(`Sending SMS: ${subject}`)
-      await essentials.send_sms(`Witness Watcher: ${subject}`, message, config.SMS_PROVIDER, _g.provider_data)
+      await essentials.send_sms(`${subject}`, message, config.SMS_PROVIDER, _g.provider_data)
     } if (config.EMAIL.ENABLED) {
       essentials.log(`Sending Email: ${subject}`)
-      await essentials.send_email(`Witness Watcher: ${subject}`, message, _g.mail_data)
+      await essentials.send_email(`${subject}`, message, _g.mail_data)
     } if (config.TELEGRAM.ENABLED) {
       essentials.log(`Sending Telegram: ${subject}`)
       await essentials.send_telegram(message, _g.telegram_data)
