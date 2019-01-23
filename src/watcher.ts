@@ -105,7 +105,7 @@ const handle_missed_block = async (witness, IS_TESTING, NOTIFY, FAILOVER, DISABL
 
   // Send notifications if missed block should always be alerted or if the missed block threshold has been reached
   if (NOTIFY && (_g.config.ALERT_AFTER_EVERY_MISSED || missed_since_start > _g.config.MISSED_BLOCKS_THRESHOLD)) {
-    send_alerts(`Missed Block!`, `Witness missed 1 Block!${missed_since_start < _g.config.MISSED_BLOCKS_THRESHOLD ? ` ${missed_since_start} more until failover.` : ''}`)
+    await send_alerts(`Witness ${_g.witness_data.witness}: Missed Block!`, `Witness ${_g.witness_data.witness}: Missed Block!${missed_since_start < _g.config.MISSED_BLOCKS_THRESHOLD ? ` ${missed_since_start} more until failover.` : ''}`)
   } else {
     essentials.log(!NOTIFY ? 'TEST-MODE: Would have send notifications for missed block' : `Didn't send notification due to not reaching missed block threshold`)
   }
@@ -135,7 +135,7 @@ const handle_missed_block = async (witness, IS_TESTING, NOTIFY, FAILOVER, DISABL
 
     // Send notifications
     if (NOTIFY) {
-      send_alerts(`Updated Signing Key`, `Updated Signing Key to ${_g.CURRENT_BACKUP_KEY.public}`)
+      await send_alerts(`Witness ${_g.witness_data.witness}: Updated Signing Key`, `Witness ${_g.witness_data.witness}: Updated Signing Key to ${_g.CURRENT_BACKUP_KEY.public}`)
     } else {
       essentials.log(`TEST-MODE: Would have send notifications for updated signing key`)
     }
