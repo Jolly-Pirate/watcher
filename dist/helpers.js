@@ -66,15 +66,15 @@ exports.send_alerts = (subject, message, force = false) => __awaiter(this, void 
     try {
         if (config.SMS.NEXMO || config.SMS.TWILIO) {
             essentials.log(`Sending SMS: ${subject}`);
-            essentials.send_sms(`Witness Watcher: ${subject}`, message, config.SMS_PROVIDER, _g.provider_data);
+            yield essentials.send_sms(`Witness Watcher: ${subject}`, message, config.SMS_PROVIDER, _g.provider_data);
         }
         if (config.EMAIL.ENABLED) {
             essentials.log(`Sending Email: ${subject}`);
-            essentials.send_email(`Witness Watcher: ${subject}`, message, _g.mail_data);
+            yield essentials.send_email(`Witness Watcher: ${subject}`, message, _g.mail_data);
         }
         if (config.TELEGRAM.ENABLED) {
             essentials.log(`Sending Telegram: ${subject}`);
-            essentials.send_telegram(message, _g.telegram_data);
+            yield essentials.send_telegram(message, _g.telegram_data);
         }
     }
     catch (error) {
