@@ -57,7 +57,6 @@ nano configs/config.json
 - ROTATE_ROUNDS: How many rounds should be rotated? (-1 is infinite)
 - WITNESS: Witness account
 - INTERVAL: How often should watcher iterate and check for new missed blocks? (in minutes)
-- MAX_AGE_LAST_MISSED_DAYS: After how many days, should the data (as in rotated rounds & missed block threshold) be reset?
 - ACTIVE_KEY: Add your private active key. Only needed if you're not adding private signing keys (see below) or if your witness is disabled.
 - SIGNING_KEYS: Add **all** your signing keys here as pairs. As of HF20, you can now also change keys and witness properties via your private signing keys.
 
