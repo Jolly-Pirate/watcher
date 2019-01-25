@@ -8,6 +8,9 @@ export let TRANSACTION_SIGNING_KEY = ''
 export let USED_SIGNING_KEYS: Array<string> = []
 export let CURRENT_BACKUP_KEY: { public: string, private: string } = { public: 'STM1111111111111111111111111111111114T1Anm', private: '' }
 
+export let MISSED_BLOCK_FLAG = false
+export let last_confirmed_block_num = 0
+
 export let rotation_round = 0
 
 export let start_total_missed = 99999
