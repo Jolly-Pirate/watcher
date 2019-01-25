@@ -62,11 +62,6 @@ let config = convict({
     format: '*',
     default: ''
   },
-  MAX_AGE_LAST_MISSED_DAYS: {
-    doc: 'After how many days should the missed block threshold be reset',
-    format: Number,
-    default: 1
-  },
   SMS: {
     doc: 'Settings for SMS alert',
     format: '*',

@@ -111,6 +111,7 @@ exports.set_initial_witness = (x) => {
     _g.current_total_missed = _g.start_total_missed;
     _g.witness_data.url = x.url;
     _g.witness_data.props = x.props;
+    _g.last_confirmed_block_num = x.last_confirmed_block_num;
     if (_g.config.SIGNING_KEYS.filter(y => y.public === x.signing_key).length <= 0) {
         _g.config.SIGNING_KEYS.push({ public: x.signing_key, private: '' });
     }

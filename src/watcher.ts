@@ -30,7 +30,16 @@ let watch_witness = async (IS_TESTING, NOTIFY, FAILOVER, DISABLE) => {
   try {
     await initiate_watcher(IS_TESTING)
 
-    let witness: { signing_key: string, total_missed: number } = await essentials.get_witness_by_account(_g.client, _g.witness_data.witness)
+    let witness: { signing_key: string, total_missed: number, last_confirmed_block_num: number } = await essentials.get_witness_by_account(_g.client, _g.witness_data.witness)
+
+    // If a block has been missed before, but witness node has recovered and signed a new block
+    if(_g.MISSED_BLOCK_FLAG && witness.last_confirmed_block_num > _g.last_confirmed_block_num) {
+      essentials.log(`Recovered on block ${witness.last_confirmed_block_num}`)
+      _g.start_total_missed = _g.current_total_missed = witness.total_missed
+      _g.rotation_round = 0
+      _g.MISSED_BLOCK_FLAG = false
+      _g.last_confirmed_block_num = witness.last_confirmed_block_num
+    }
 
     // Was witness manually disabled?
     if (witness.signing_key === _g.NULL_KEY) {
@@ -90,15 +99,7 @@ let initiate_watcher = async (IS_TESTING) => {
 }
 
 const handle_missed_block = async (witness, IS_TESTING, NOTIFY, FAILOVER, DISABLE) => {
-  // If the last missed block is older than x days
-  if (moment.utc().subtract(_g.config.MAX_AGE_LAST_MISSED_DAYS || 1, 'd').valueOf() >= _g.last_missed) {
-    essentials.log(`Last missed block is older than ${_g.config.MAX_AGE_LAST_MISSED_DAYS} Days`)
-    _g.start_total_missed = _g.current_total_missed = witness.total_missed - 1
-    // Resetting the rotation round
-    _g.rotation_round = 0
-  }
-
-  _g.last_missed = moment.utc().valueOf()
+  _g.MISSED_BLOCK_FLAG = true
   let missed_since_start = witness.total_missed - _g.start_total_missed
 
   essentials.log('[ DANGER ] Missed a Block!')
