@@ -30,7 +30,24 @@ let watch_witness = async (IS_TESTING, NOTIFY, FAILOVER, DISABLE) => {
   try {
     await initiate_watcher(IS_TESTING)
 
-    let witness: { signing_key: string, total_missed: number, last_confirmed_block_num: number } = await essentials.get_witness_by_account(_g.client, _g.witness_data.witness)
+    let witness: { signing_key: string, total_missed: number, last_confirmed_block_num: number } = await essentials.get_witness_by_account(_g.client, _g.witness_data.witness)    
+
+    // If we're testing, add one missed block
+    if (IS_TESTING) {
+      essentials.log('TEST-MODE: Adding an imaginary missed block')
+      witness.total_missed += test_block_count
+      test_block_count += 1
+    }
+
+    // Was witness manually disabled?
+    if (witness.signing_key === _g.NULL_KEY) {
+      essentials.log('Witness is disabled - skipping checking.')
+      return
+    } 
+    else if (witness.signing_key === _g.CURRENT_BACKUP_KEY.public) {
+      // Was the current signing key manually changed?
+      update_signing_keys()
+    }
 
     // If a block has been missed before, but witness node has recovered and signed a new block
     if(_g.MISSED_BLOCK_FLAG && witness.last_confirmed_block_num > _g.last_confirmed_block_num) {
@@ -41,28 +58,11 @@ let watch_witness = async (IS_TESTING, NOTIFY, FAILOVER, DISABLE) => {
       _g.last_confirmed_block_num = witness.last_confirmed_block_num
     }
 
-    // Was witness manually disabled?
-    if (witness.signing_key === _g.NULL_KEY) {
-      essentials.log('Witness is disabled - skipping checking.')
-      return
-    }
-
-    // If we're testing, add one missed block
-    if (IS_TESTING) {
-      essentials.log('TEST-MODE: Adding an imaginary missed block')
-      witness.total_missed += test_block_count
-      test_block_count += 1
-    }
-
-    // Was the current signing key manually changed?
-    else if (witness.signing_key === _g.CURRENT_BACKUP_KEY.public) {
-      update_signing_keys()
-    }
-
-    // New missed block?
+     // New missed block?
     if (witness.total_missed > _g.current_total_missed) {
       return await handle_missed_block(witness, IS_TESTING, NOTIFY, FAILOVER, DISABLE)
     }
+    
     return false
   } catch (error) {
     console.error('watch_witness', error)
