@@ -52,11 +52,13 @@ let watch_witness = async (IS_TESTING, NOTIFY, FAILOVER, DISABLE) => {
     // If a block has been missed before, but witness node has recovered and signed a new block
     if(_g.MISSED_BLOCK_FLAG && witness.last_confirmed_block_num > _g.last_confirmed_block_num) {
       essentials.log(`Recovered on block ${witness.last_confirmed_block_num}`)
+      await send_alerts(`Witness ${_g.witness_data.witness}: Recovered on block ${witness.last_confirmed_block_num}`, `Witness ${_g.witness_data.witness}: Recovered on block ${witness.last_confirmed_block_num}`)
       _g.start_total_missed = _g.current_total_missed = witness.total_missed
       _g.rotation_round = 0
       _g.MISSED_BLOCK_FLAG = false
-      _g.last_confirmed_block_num = witness.last_confirmed_block_num
     }
+
+    _g.last_confirmed_block_num = witness.last_confirmed_block_num
 
      // New missed block?
     if (witness.total_missed > _g.current_total_missed) {
