@@ -33,7 +33,7 @@ let watch_witness = async (IS_TESTING, NOTIFY, FAILOVER, DISABLE) => {
     let witness: { owner: string, signing_key: string, total_missed: number, last_confirmed_block_num: number } = await essentials.get_witness_by_account(_g.client, _g.witness_data.witness)  
 
     // Prevent API hickups from triggering failover
-    if(!witness && !witness.owner) {
+    if(!witness || !witness.owner) {
       essentials.log(`Received invalid witness object. Skipping round.`)
       return false
     }
