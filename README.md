@@ -83,26 +83,30 @@ nano configs/config.json
   - BOT_TOKEN: The token you'll get from botfather
   - USER_ID: You'll get the ID once you've created your bot and pressed on start or entered /help  
 
----
-
-#### .ENV Explanation
-
-
-
 To get the TELEGRAM data, follow this guide: https://core.telegram.org/bots#6-botfather
 
 ---
 
 ## Start
 
-You can either run it directly with `npm start` or by using PM2 (my favourite).
+Option 1: NPM (no background)
+```
+npm start
+```
 
+Option 2: PM2 (background)
 ```
 sudo npm install pm2 -g # if you haven't installed it yet
 
 pm2 start npm --name=watcher -- start
 pm2 save
 pm2 logs watcher
+```
+
+Option 3: Docker (background)
+```
+./run.sh start
+./run.sh logs
 ```
 
 ## Testing
